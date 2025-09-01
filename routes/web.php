@@ -917,6 +917,29 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/api/list', [\App\Http\Controllers\CourseLocationController::class, 'api'])->name('api');
     });
 
+    // Message Management
+    Route::prefix('messages')->name('messages.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\MessagesController::class, 'index'])->name('index');
+        Route::get('/create', [\App\Http\Controllers\MessagesController::class, 'create'])->name('create');
+        Route::post('/', [\App\Http\Controllers\MessagesController::class, 'store'])->name('store');
+        Route::post('/send-with-template', [\App\Http\Controllers\MessagesController::class, 'sendWithTemplate'])->name('send-with-template');
+        Route::get('/{message}', [\App\Http\Controllers\MessagesController::class, 'show'])->name('show');
+        Route::patch('/{message}/resend', [\App\Http\Controllers\MessagesController::class, 'resend'])->name('resend');
+        Route::delete('/{message}', [\App\Http\Controllers\MessagesController::class, 'destroy'])->name('destroy');
+    });
+
+    // Message Templates Management
+    Route::prefix('message-templates')->name('message-templates.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\MessageTemplateController::class, 'index'])->name('index');
+        Route::get('/create', [\App\Http\Controllers\MessageTemplateController::class, 'create'])->name('create');
+        Route::post('/', [\App\Http\Controllers\MessageTemplateController::class, 'store'])->name('store');
+        Route::get('/{template}', [\App\Http\Controllers\MessageTemplateController::class, 'show'])->name('show');
+        Route::get('/{template}/edit', [\App\Http\Controllers\MessageTemplateController::class, 'edit'])->name('edit');
+        Route::put('/{template}', [\App\Http\Controllers\MessageTemplateController::class, 'update'])->name('update');
+        Route::delete('/{template}', [\App\Http\Controllers\MessageTemplateController::class, 'destroy'])->name('destroy');
+        Route::patch('/{template}/toggle-status', [\App\Http\Controllers\MessageTemplateController::class, 'toggleStatus'])->name('toggle-status');
+    });
+
     // Main Management Page
     Route::get('/management', function () {
         return Inertia::render('Management/Index');
