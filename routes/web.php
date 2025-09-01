@@ -342,7 +342,6 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/template', [\App\Http\Controllers\MessagesController::class, 'sendWithTemplate'])->name('template');
         Route::post('/course', [\App\Http\Controllers\MessagesController::class, 'sendCourseMessage'])->name('course');
         Route::get('/{message}', [\App\Http\Controllers\MessagesController::class, 'show'])->name('show');
-        Route::post('/{message}/resend', [\App\Http\Controllers\MessagesController::class, 'resend'])->name('resend');
         Route::get('/stats', [\App\Http\Controllers\MessagesController::class, 'stats'])->name('stats');
     });
 
