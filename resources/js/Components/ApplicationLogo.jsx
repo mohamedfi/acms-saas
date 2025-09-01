@@ -1,0 +1,12 @@
+export default function ApplicationLogo(props) {
+    return (
+        <div className="w-16 h-16 rounded-full bg-white shadow-lg flex items-center justify-center overflow-hidden">
+            <img
+                {...props}
+                src="/images/ACMS_logo.png"
+                alt="ACMS Logo"
+                className="w-12 h-12 object-contain"
+            />
+        </div>
+    );
+}

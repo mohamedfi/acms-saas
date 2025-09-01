@@ -1,0 +1,6 @@
+/* Chrome-specific fixes */
+@import './chrome-fixes.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

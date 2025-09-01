@@ -1,0 +1,57 @@
+/* Chrome-specific CSS fixes for cursor pointer */
+
+/* Force cursor pointer on all clickable elements in Chrome */
+a, button, [role="button"], .cursor-pointer {
+    cursor: pointer !important;
+}
+
+/* Ensure Link components show pointer cursor */
+[data-inertia-link] {
+    cursor: pointer !important;
+}
+
+/* Fix for Inertia.js Link components */
+[href] {
+    cursor: pointer !important;
+}
+
+/* Force pointer on dropdown elements */
+.dropdown-trigger, .dropdown-content, .dropdown-link {
+    cursor: pointer !important;
+}
+
+/* Ensure all interactive elements show pointer */
+*[onClick], *[onclick] {
+    cursor: pointer !important;
+}
+
+/* Fix for React components with cursor-pointer class */
+.cursor-pointer {
+    cursor: pointer !important;
+}
+
+/* Chrome-specific hover fixes */
+@media (hover: hover) {
+    .hover\:bg-slate-800:hover {
+        background-color: #1e293b !important;
+    }
+    
+    .hover\:bg-gray-100:hover {
+        background-color: #f3f4f6 !important;
+    }
+    
+    .hover\:bg-gray-800:hover {
+        background-color: #1f2937 !important;
+    }
+}
+
+/* Ensure transitions work in Chrome */
+.transition-all, .transition-colors, .transition-transform {
+    transition: all 0.2s ease-in-out;
+}
+
+/* Fix for Chrome rendering issues */
+* {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
