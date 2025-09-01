@@ -32,7 +32,7 @@ class WhatsAppService
 
             // Format phone number
             $toNumber = $this->formatPhoneNumber($message->recipient_value);
-            
+
             // Send WhatsApp message via Meta API
             $response = Http::withToken($this->accessToken)
                 ->post("https://graph.facebook.com/{$this->apiVersion}/{$this->phoneNumberId}/messages", [
@@ -46,7 +46,7 @@ class WhatsAppService
 
             if ($response->successful()) {
                 $data = $response->json();
-                
+
                 // Update message with WhatsApp response
                 $message->update([
                     'metadata' => [
@@ -59,12 +59,11 @@ class WhatsAppService
 
                 $message->markAsSent();
                 Log::info("WhatsApp message sent successfully to: {$message->recipient_value}");
-                
+
                 return true;
             } else {
                 throw new \Exception("WhatsApp API error: " . $response->body());
             }
-
         } catch (\Exception $e) {
             Log::error("WhatsApp sending failed: " . $e->getMessage());
             $message->markAsFailed($e->getMessage());
@@ -83,7 +82,7 @@ class WhatsAppService
             }
 
             $toNumber = $this->formatPhoneNumber($message->recipient_value);
-            
+
             $payload = [
                 'messaging_product' => 'whatsapp',
                 'to' => $toNumber,
@@ -106,7 +105,7 @@ class WhatsAppService
 
             if ($response->successful()) {
                 $data = $response->json();
-                
+
                 $message->update([
                     'metadata' => [
                         'whatsapp_message_id' => $data['messages'][0]['id'] ?? null,
@@ -119,12 +118,11 @@ class WhatsAppService
 
                 $message->markAsSent();
                 Log::info("WhatsApp template message sent successfully to: {$message->recipient_value}");
-                
+
                 return true;
             } else {
                 throw new \Exception("WhatsApp template API error: " . $response->body());
             }
-
         } catch (\Exception $e) {
             Log::error("WhatsApp template sending failed: " . $e->getMessage());
             $message->markAsFailed($e->getMessage());
@@ -138,7 +136,7 @@ class WhatsAppService
     protected function simulateSending(Message $message): bool
     {
         Log::info("WhatsApp not configured - simulating message send for: {$message->recipient_value}");
-        
+
         $message->update([
             'metadata' => [
                 'simulated' => true,
@@ -146,7 +144,7 @@ class WhatsAppService
                 'simulated_at' => now()->toISOString(),
             ],
         ]);
-        
+
         $message->markAsSent();
         return true;
     }
@@ -158,12 +156,12 @@ class WhatsAppService
     {
         // Remove any non-digit characters except +
         $phoneNumber = preg_replace('/[^0-9+]/', '', $phoneNumber);
-        
+
         // If number doesn't start with +, add default country code
         if (!str_starts_with($phoneNumber, '+')) {
             $phoneNumber = '+1' . $phoneNumber; // Default to US
         }
-        
+
         return $phoneNumber;
     }
 
