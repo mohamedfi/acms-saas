@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Models\Message;
 use App\Models\MessageTemplate;
+use App\Services\SMSService;
+use App\Services\WhatsAppService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Http;
@@ -68,95 +70,21 @@ class CommunicationService
     }
 
     /**
-     * Send SMS using Twilio or similar service
+     * Send SMS using dedicated SMS service
      */
     protected function sendSMS(Message $message): bool
     {
-        try {
-            // Check if Twilio is configured
-            if (!config('services.twilio.account_sid')) {
-                // For development/testing, simulate SMS sending
-                Log::info("Twilio not configured - simulating SMS send for: {$message->recipient_value}");
-                $message->update([
-                    'metadata' => ['simulated' => true, 'note' => 'Twilio not configured - SMS simulated'],
-                ]);
-                $message->markAsSent();
-                return true;
-            }
-
-            $response = Http::withBasicAuth(
-                config('services.twilio.account_sid'),
-                config('services.twilio.auth_token')
-            )->post("https://api.twilio.com/2010-04-01/Accounts/" .
-                config('services.twilio.account_sid') . "/Messages.json", [
-                'To' => $message->recipient_value,
-                'Body' => $message->content,
-                'From' => config('services.twilio.phone_number'),
-            ]);
-
-            if ($response->successful()) {
-                $data = $response->json();
-                $message->update([
-                    'metadata' => $data,
-                    'cost' => $data['price'] ?? 0,
-                ]);
-                $message->markAsSent();
-                Log::info("SMS sent successfully to: {$message->recipient_value}");
-                return true;
-            } else {
-                throw new \Exception("SMS API error: " . $response->body());
-            }
-        } catch (\Exception $e) {
-            Log::error("SMS sending failed: " . $e->getMessage());
-            $message->markAsFailed($e->getMessage());
-            return false;
-        }
+        $smsService = app(SMSService::class);
+        return $smsService->send($message);
     }
 
     /**
-     * Send WhatsApp message using WhatsApp Business API
+     * Send WhatsApp message using dedicated WhatsApp service
      */
     protected function sendWhatsApp(Message $message): bool
     {
-        try {
-            // Check if WhatsApp Business API is configured
-            if (!config('services.whatsapp.access_token')) {
-                // For development/testing, simulate WhatsApp sending
-                Log::info("WhatsApp not configured - simulating message send for: {$message->recipient_value}");
-                $message->update([
-                    'metadata' => ['simulated' => true, 'note' => 'WhatsApp API not configured - message simulated'],
-                ]);
-                $message->markAsSent();
-                return true;
-            }
-
-            $response = Http::withToken(config('services.whatsapp.access_token'))
-                ->post("https://graph.facebook.com/v17.0/" .
-                    config('services.whatsapp.phone_number_id') . "/messages", [
-                    'messaging_product' => 'whatsapp',
-                    'to' => $message->recipient_value,
-                    'type' => 'text',
-                    'text' => [
-                        'body' => $message->content
-                    ]
-                ]);
-
-            if ($response->successful()) {
-                $data = $response->json();
-                $message->update([
-                    'metadata' => $data,
-                ]);
-                $message->markAsSent();
-                Log::info("WhatsApp message sent successfully to: {$message->recipient_value}");
-                return true;
-            } else {
-                throw new \Exception("WhatsApp API error: " . $response->body());
-            }
-        } catch (\Exception $e) {
-            Log::error("WhatsApp sending failed: " . $e->getMessage());
-            $message->markAsFailed($e->getMessage());
-            return false;
-        }
+        $whatsappService = app(WhatsAppService::class);
+        return $whatsappService->send($message);
     }
 
     /**

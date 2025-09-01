@@ -15,6 +15,14 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(\App\Services\CommunicationService::class, function ($app) {
             return new \App\Services\CommunicationService();
         });
+
+        $this->app->singleton(\App\Services\SMSService::class, function ($app) {
+            return new \App\Services\SMSService();
+        });
+
+        $this->app->singleton(\App\Services\WhatsAppService::class, function ($app) {
+            return new \App\Services\WhatsAppService();
+        });
     }
 
     /**

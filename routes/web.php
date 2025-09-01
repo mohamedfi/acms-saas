@@ -926,6 +926,51 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{message}', [\App\Http\Controllers\MessagesController::class, 'show'])->name('show');
         Route::patch('/{message}/resend', [\App\Http\Controllers\MessagesController::class, 'resend'])->name('resend');
         Route::delete('/{message}', [\App\Http\Controllers\MessagesController::class, 'destroy'])->name('destroy');
+
+        // Test routes for SMS and WhatsApp
+        Route::post('/test-sms', function () {
+            $message = new \App\Models\Message([
+                'recipient_type' => 'phone',
+                'recipient_value' => '+1234567890',
+                'recipient_name' => 'Test User',
+                'subject' => 'Test SMS',
+                'content' => 'This is a test SMS message from ACMS SaaS!',
+                'channel' => 'sms',
+                'status' => 'pending'
+            ]);
+
+            $smsService = app(\App\Services\SMSService::class);
+            $result = $smsService->send($message);
+
+            return response()->json([
+                'success' => $result,
+                'message' => $result ? 'SMS sent successfully' : 'SMS failed',
+                'configured' => $smsService->isConfigured(),
+                'balance' => $smsService->getBalance()
+            ]);
+        })->name('test-sms');
+
+        Route::post('/test-whatsapp', function () {
+            $message = new \App\Models\Message([
+                'recipient_type' => 'phone',
+                'recipient_value' => '+1234567890',
+                'recipient_name' => 'Test User',
+                'subject' => 'Test WhatsApp',
+                'content' => 'This is a test WhatsApp message from ACMS SaaS!',
+                'channel' => 'whatsapp',
+                'status' => 'pending'
+            ]);
+
+            $whatsappService = app(\App\Services\WhatsAppService::class);
+            $result = $whatsappService->send($message);
+
+            return response()->json([
+                'success' => $result,
+                'message' => $result ? 'WhatsApp message sent successfully' : 'WhatsApp message failed',
+                'configured' => $whatsappService->isConfigured(),
+                'templates' => $whatsappService->getTemplates()
+            ]);
+        })->name('test-whatsapp');
     });
 
     // Message Templates Management
