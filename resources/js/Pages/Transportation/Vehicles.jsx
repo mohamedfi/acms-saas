@@ -55,7 +55,7 @@ export default function Vehicles({ vehicles }) {
                         </div>
                         <div className="flex space-x-3">
                             <Link
-                                href={route('transportation.vehicles.create')}
+                                href={route('transportation.companies.index')}
                                 className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                             >
                                 ➕ Add New Vehicle
@@ -284,7 +284,7 @@ export default function Vehicles({ vehicles }) {
                                 Start building your fleet by adding your first vehicle.
                             </p>
                             <Link
-                                href={route('transportation.vehicles.create')}
+                                href={route('transportation.companies.index')}
                                 className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
                             >
                                 ➕ Add New Vehicle

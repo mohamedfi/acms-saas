@@ -1,1 +1,0 @@
-import{j as e}from"./app-DPxrnJH9.js";function t(o){return e.jsx("div",{className:"w-16 h-16 rounded-full bg-white shadow-lg flex items-center justify-center overflow-hidden",children:e.jsx("img",{...o,src:"/images/ACMS_logo.png",alt:"ACMS Logo",className:"w-12 h-12 object-contain"})})}export{t as A};

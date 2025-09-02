@@ -168,7 +168,7 @@ class RentalCompanyController extends Controller
 
             $vehicleTypes = $company->vehicles->groupBy('vehicle_type')->map->count();
             $priceRange = $company->vehicles->where('is_active', true)->where('status', 'available');
-            
+
             $stats = [
                 'vehicles' => $vehicleStats,
                 'vehicle_types' => $vehicleTypes,
@@ -312,7 +312,7 @@ class RentalCompanyController extends Controller
         try {
             // Check if company has active bookings or vehicles
             $activeVehicles = $company->vehicles()->where('status', 'rented')->count();
-            
+
             if ($activeVehicles > 0) {
                 return back()->with('error', 'Cannot delete company with active vehicle rentals.');
             }
@@ -320,7 +320,7 @@ class RentalCompanyController extends Controller
             // Delete logo if exists
             if ($company->logo) {
                 Storage::disk('public')->delete($company->logo);
-                }
+            }
 
             $companyName = $company->name;
             $company->delete();
@@ -339,7 +339,7 @@ class RentalCompanyController extends Controller
     {
         try {
             $company->update(['is_active' => !$company->is_active]);
-            
+
             $status = $company->is_active ? 'activated' : 'deactivated';
             return back()->with('success', "Company {$status} successfully!");
         } catch (\Exception $e) {
@@ -354,7 +354,7 @@ class RentalCompanyController extends Controller
     {
         try {
             $company->update(['is_verified' => !$company->is_verified]);
-            
+
             $status = $company->is_verified ? 'verified' : 'unverified';
             return back()->with('success', "Company {$status} successfully!");
         } catch (\Exception $e) {
@@ -369,7 +369,7 @@ class RentalCompanyController extends Controller
     {
         try {
             $company->update(['is_featured' => !$company->is_featured]);
-            
+
             $status = $company->is_featured ? 'added to featured' : 'removed from featured';
             return back()->with('success', "Company {$status} successfully!");
         } catch (\Exception $e) {
@@ -439,8 +439,303 @@ class RentalCompanyController extends Controller
     }
 
     /**
-     * Search and filter rental companies.
+     * Show the form for creating a new vehicle for the company.
      */
+    public function createVehicle(RentalCompany $company)
+    {
+        $vehicleTypes = [
+            'Sedan' => 'Sedan',
+            'SUV' => 'SUV',
+            'Hatchback' => 'Hatchback',
+            'Coupe' => 'Coupe',
+            'Convertible' => 'Convertible',
+            'Wagon' => 'Wagon',
+            'Van' => 'Van',
+            'Minivan' => 'Minivan',
+            'Pickup' => 'Pickup Truck',
+            'Bus' => 'Bus',
+            'Luxury' => 'Luxury Vehicle',
+            'Sports' => 'Sports Car',
+        ];
+
+        $fuelTypes = [
+            'Gasoline' => 'Gasoline',
+            'Diesel' => 'Diesel',
+            'Hybrid' => 'Hybrid',
+            'Electric' => 'Electric',
+            'LPG' => 'LPG',
+            'CNG' => 'CNG',
+        ];
+
+        $transmissions = [
+            'Manual' => 'Manual',
+            'Automatic' => 'Automatic',
+            'CVT' => 'CVT',
+            'Semi-Automatic' => 'Semi-Automatic',
+        ];
+
+        $features = [
+            'Air Conditioning' => 'Air Conditioning',
+            'GPS Navigation' => 'GPS Navigation',
+            'Bluetooth' => 'Bluetooth',
+            'USB Port' => 'USB Port',
+            'Backup Camera' => 'Backup Camera',
+            'Parking Sensors' => 'Parking Sensors',
+            'Sunroof' => 'Sunroof',
+            'Leather Seats' => 'Leather Seats',
+            'Heated Seats' => 'Heated Seats',
+            'Cruise Control' => 'Cruise Control',
+            'ABS' => 'ABS',
+            'Airbags' => 'Airbags',
+            'Child Safety Seats' => 'Child Safety Seats',
+            'WiFi' => 'WiFi',
+            'Entertainment System' => 'Entertainment System',
+        ];
+
+        return Inertia::render('Transportation/Companies/CreateVehicle', [
+            'company' => $company,
+            'vehicleTypes' => $vehicleTypes,
+            'fuelTypes' => $fuelTypes,
+            'transmissions' => $transmissions,
+            'features' => $features,
+        ]);
+    }
+
+    /**
+     * Store a newly created vehicle for the company.
+     */
+    public function storeVehicle(Request $request, RentalCompany $company)
+    {
+        $validated = $request->validate([
+            'vehicle_type' => 'required|string|max:255',
+            'brand' => 'required|string|max:255',
+            'model' => 'required|string|max:255',
+            'year' => 'required|integer|min:1900|max:' . (date('Y') + 1),
+            'license_plate' => 'required|string|max:20|unique:company_vehicles,license_plate',
+            'color' => 'required|string|max:100',
+            'seats' => 'required|integer|min:1|max:50',
+            'fuel_type' => 'required|string|max:100',
+            'transmission' => 'required|string|max:100',
+            'engine_size' => 'nullable|string|max:100',
+            'fuel_consumption' => 'nullable|numeric|min:0',
+            'mileage' => 'nullable|integer|min:0',
+            'features' => 'nullable|array',
+            'description' => 'nullable|string',
+            'images' => 'nullable|array',
+            'hourly_rate' => 'nullable|numeric|min:0',
+            'daily_rate' => 'required|numeric|min:0',
+            'weekly_rate' => 'nullable|numeric|min:0',
+            'monthly_rate' => 'nullable|numeric|min:0',
+            'weekend_rate' => 'nullable|numeric|min:0',
+            'holiday_rate' => 'nullable|numeric|min:0',
+            'mileage_charge_per_km' => 'nullable|numeric|min:0',
+            'included_mileage_per_day' => 'nullable|integer|min:0',
+            'driver_charge_per_hour' => 'nullable|numeric|min:0',
+            'fuel_charge' => 'nullable|numeric|min:0',
+            'cleaning_fee' => 'nullable|numeric|min:0',
+            'insurance_daily_rate' => 'nullable|numeric|min:0',
+            'security_deposit' => 'nullable|numeric|min:0',
+            'insurance_included' => 'boolean',
+            'insurance_coverage' => 'nullable|string',
+            'status' => 'required|in:available,rented,maintenance,out_of_service',
+            'is_active' => 'boolean',
+            'requires_special_license' => 'boolean',
+            'minimum_age_requirement' => 'nullable|integer|min:18|max:100',
+            'minimum_driving_experience' => 'nullable|integer|min:0',
+            'current_location' => 'nullable|string|max:255',
+            'pickup_locations' => 'nullable|array',
+            'delivery_available' => 'boolean',
+            'delivery_charge' => 'nullable|numeric|min:0',
+            'delivery_radius_km' => 'nullable|integer|min:0',
+            'last_service_date' => 'nullable|date',
+            'next_service_due' => 'nullable|date|after:last_service_date',
+            'insurance_expiry' => 'nullable|date',
+            'registration_expiry' => 'nullable|date',
+            'maintenance_notes' => 'nullable|string',
+            'minimum_rental_hours' => 'nullable|integer|min:1',
+            'maximum_rental_days' => 'nullable|integer|min:1',
+            'blackout_dates' => 'nullable|array',
+            'weekend_only' => 'boolean',
+            'advance_booking_required' => 'boolean',
+            'advance_booking_hours' => 'nullable|integer|min:0',
+            'additional_features' => 'nullable|array',
+            'special_instructions' => 'nullable|string',
+            'admin_notes' => 'nullable|string',
+        ]);
+
+        try {
+            $validated['rental_company_id'] = $company->id;
+            $validated['status'] = $validated['status'] ?? 'available';
+            $validated['is_active'] = $validated['is_active'] ?? true;
+
+            $vehicle = CompanyVehicle::create($validated);
+
+            return redirect()->route('transportation.companies.vehicles', $company)
+                ->with('success', 'Vehicle added successfully!');
+        } catch (\Exception $e) {
+            return back()->withInput()
+                ->with('error', 'Error creating vehicle: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Show the form for editing the specified vehicle.
+     */
+    public function editVehicle(RentalCompany $company, CompanyVehicle $vehicle)
+    {
+        $vehicleTypes = [
+            'Sedan' => 'Sedan',
+            'SUV' => 'SUV',
+            'Hatchback' => 'Hatchback',
+            'Coupe' => 'Coupe',
+            'Convertible' => 'Convertible',
+            'Wagon' => 'Wagon',
+            'Van' => 'Van',
+            'Minivan' => 'Minivan',
+            'Pickup' => 'Pickup Truck',
+            'Bus' => 'Bus',
+            'Luxury' => 'Luxury Vehicle',
+            'Sports' => 'Sports Car',
+        ];
+
+        $fuelTypes = [
+            'Gasoline' => 'Gasoline',
+            'Diesel' => 'Diesel',
+            'Hybrid' => 'Hybrid',
+            'Electric' => 'Electric',
+            'LPG' => 'LPG',
+            'CNG' => 'CNG',
+        ];
+
+        $transmissions = [
+            'Manual' => 'Manual',
+            'Automatic' => 'Automatic',
+            'CVT' => 'CVT',
+            'Semi-Automatic' => 'Semi-Automatic',
+        ];
+
+        $features = [
+            'Air Conditioning' => 'Air Conditioning',
+            'GPS Navigation' => 'GPS Navigation',
+            'Bluetooth' => 'Bluetooth',
+            'USB Port' => 'USB Port',
+            'Backup Camera' => 'Backup Camera',
+            'Parking Sensors' => 'Parking Sensors',
+            'Sunroof' => 'Sunroof',
+            'Leather Seats' => 'Leather Seats',
+            'Heated Seats' => 'Heated Seats',
+            'Cruise Control' => 'Cruise Control',
+            'ABS' => 'ABS',
+            'Airbags' => 'Airbags',
+            'Child Safety Seats' => 'Child Safety Seats',
+            'WiFi' => 'WiFi',
+            'Entertainment System' => 'Entertainment System',
+        ];
+
+        return Inertia::render('Transportation/Companies/EditVehicle', [
+            'company' => $company,
+            'vehicle' => $vehicle,
+            'vehicleTypes' => $vehicleTypes,
+            'fuelTypes' => $fuelTypes,
+            'transmissions' => $transmissions,
+            'features' => $features,
+        ]);
+    }
+
+    /**
+     * Update the specified vehicle.
+     */
+    public function updateVehicle(Request $request, RentalCompany $company, CompanyVehicle $vehicle)
+    {
+        $validated = $request->validate([
+            'vehicle_type' => 'required|string|max:255',
+            'brand' => 'required|string|max:255',
+            'model' => 'required|string|max:255',
+            'year' => 'required|integer|min:1900|max:' . (date('Y') + 1),
+            'license_plate' => 'required|string|max:20|unique:company_vehicles,license_plate,' . $vehicle->id,
+            'color' => 'required|string|max:100',
+            'seats' => 'required|integer|min:1|max:50',
+            'fuel_type' => 'required|string|max:100',
+            'transmission' => 'required|string|max:100',
+            'engine_size' => 'nullable|string|max:100',
+            'fuel_consumption' => 'nullable|numeric|min:0',
+            'mileage' => 'nullable|integer|min:0',
+            'features' => 'nullable|array',
+            'description' => 'nullable|string',
+            'images' => 'nullable|array',
+            'hourly_rate' => 'nullable|numeric|min:0',
+            'daily_rate' => 'required|numeric|min:0',
+            'weekly_rate' => 'nullable|numeric|min:0',
+            'monthly_rate' => 'nullable|numeric|min:0',
+            'weekend_rate' => 'nullable|numeric|min:0',
+            'holiday_rate' => 'nullable|numeric|min:0',
+            'mileage_charge_per_km' => 'nullable|numeric|min:0',
+            'included_mileage_per_day' => 'nullable|integer|min:0',
+            'driver_charge_per_hour' => 'nullable|numeric|min:0',
+            'fuel_charge' => 'nullable|numeric|min:0',
+            'cleaning_fee' => 'nullable|numeric|min:0',
+            'insurance_daily_rate' => 'nullable|numeric|min:0',
+            'security_deposit' => 'nullable|numeric|min:0',
+            'insurance_included' => 'boolean',
+            'insurance_coverage' => 'nullable|string',
+            'status' => 'required|in:available,rented,maintenance,out_of_service',
+            'is_active' => 'boolean',
+            'requires_special_license' => 'boolean',
+            'minimum_age_requirement' => 'nullable|integer|min:18|max:100',
+            'minimum_driving_experience' => 'nullable|integer|min:0',
+            'current_location' => 'nullable|string|max:255',
+            'pickup_locations' => 'nullable|array',
+            'delivery_available' => 'boolean',
+            'delivery_charge' => 'nullable|numeric|min:0',
+            'delivery_radius_km' => 'nullable|integer|min:0',
+            'last_service_date' => 'nullable|date',
+            'next_service_due' => 'nullable|date|after:last_service_date',
+            'insurance_expiry' => 'nullable|date',
+            'registration_expiry' => 'nullable|date',
+            'maintenance_notes' => 'nullable|string',
+            'minimum_rental_hours' => 'nullable|integer|min:1',
+            'maximum_rental_days' => 'nullable|integer|min:1',
+            'blackout_dates' => 'nullable|array',
+            'weekend_only' => 'boolean',
+            'advance_booking_required' => 'boolean',
+            'advance_booking_hours' => 'nullable|integer|min:0',
+            'additional_features' => 'nullable|array',
+            'special_instructions' => 'nullable|string',
+            'admin_notes' => 'nullable|string',
+        ]);
+
+        try {
+            $vehicle->update($validated);
+
+            return redirect()->route('transportation.companies.vehicles', $company)
+                ->with('success', 'Vehicle updated successfully!');
+        } catch (\Exception $e) {
+            return back()->withInput()
+                ->with('error', 'Error updating vehicle: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Remove the specified vehicle from the company.
+     */
+    public function destroyVehicle(RentalCompany $company, CompanyVehicle $vehicle)
+    {
+        try {
+            // Check if vehicle has active bookings
+            if ($vehicle->status === 'rented') {
+                return back()->with('error', 'Cannot delete vehicle that is currently rented.');
+            }
+
+            $vehicleName = $vehicle->display_name;
+            $vehicle->delete();
+
+            return redirect()->route('transportation.companies.vehicles', $company)
+                ->with('success', "Vehicle '{$vehicleName}' deleted successfully!");
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error deleting vehicle: ' . $e->getMessage());
+        }
+    }
+
     public function search(Request $request)
     {
         try {
@@ -451,8 +746,8 @@ class RentalCompanyController extends Controller
                 $search = $request->search;
                 $query->where(function ($q) use ($search) {
                     $q->where('name', 'like', "%{$search}%")
-                      ->orWhere('description', 'like', "%{$search}%")
-                      ->orWhere('city', 'like', "%{$search}%");
+                        ->orWhere('description', 'like', "%{$search}%")
+                        ->orWhere('city', 'like', "%{$search}%");
                 });
             }
 
@@ -501,5 +796,13 @@ class RentalCompanyController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => 'Search failed: ' . $e->getMessage()], 500);
         }
+    }
+
+    /**
+     * Test method to verify controller is working
+     */
+    public function testMethod()
+    {
+        return 'Test method works!';
     }
 }

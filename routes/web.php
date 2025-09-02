@@ -652,7 +652,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/transportation', [TransportationController::class, 'index'])->name('transportation.index');
         Route::get('/transportation/dashboard', [TransportationController::class, 'dashboard'])->name('transportation.dashboard');
         Route::get('/transportation/vehicles', [TransportationController::class, 'vehicles'])->name('transportation.vehicles');
-        Route::get('/transportation/vehicles/create', [TransportationController::class, 'createVehicle'])->name('transportation.vehicles.create');
         Route::post('/transportation/vehicles', [TransportationController::class, 'storeVehicle'])->name('transportation.vehicles.store');
         Route::get('/transportation/vehicles/{vehicle}/edit', [TransportationController::class, 'editVehicle'])->name('transportation.vehicles.edit');
         Route::put('/transportation/vehicles/{vehicle}', [TransportationController::class, 'updateVehicle'])->name('transportation.vehicles.update');
@@ -925,7 +924,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{message}', [\App\Http\Controllers\MessagesController::class, 'show'])->name('show');
         Route::patch('/{message}/resend', [\App\Http\Controllers\MessagesController::class, 'resend'])->name('resend');
         Route::delete('/{message}', [\App\Http\Controllers\MessagesController::class, 'destroy'])->name('destroy');
-
     });
 
     // Message Templates Management
@@ -967,6 +965,10 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
+
+// Working vehicle creation route
+Route::get('/transportation/companies/{company}/vehicles/create', [RentalCompanyController::class, 'createVehicle'])->name('transportation.companies.vehicles.create');
+Route::post('/transportation/companies/{company}/vehicles', [RentalCompanyController::class, 'storeVehicle'])->name('transportation.companies.vehicles.store');
 
 /*
 |--------------------------------------------------------------------------

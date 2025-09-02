@@ -95,7 +95,7 @@ export default function TransportationIndex({ vehicles, stats }) {
                     {/* Quick Actions */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                         <Link
-                            href={route("transportation.vehicles.create")}
+                            href={route("transportation.companies.index")}
                             className="bg-blue-600 hover:bg-blue-700 text-white p-6 rounded-lg shadow transition-colors"
                         >
                             <div className="text-center">
