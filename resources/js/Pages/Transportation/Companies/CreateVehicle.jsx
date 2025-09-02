@@ -340,7 +340,7 @@ export default function CreateVehicle({
                 <button
                   type="button"
                   onClick={() => setShowTemplateSelector(true)}
-                  className="text-sm text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-200"
+                  className="text-sm text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-200 cursor-pointer"
                 >
                   Change Template
                 </button>
@@ -706,7 +706,7 @@ export default function CreateVehicle({
                           <button
                             type="button"
                             onClick={() => removeRoutePricing(index)}
-                            className="text-red-600 hover:text-red-800 text-sm"
+                            className="text-red-600 hover:text-red-800 text-sm cursor-pointer"
                           >
                             🗑️ Remove Route
                           </button>
@@ -906,7 +906,7 @@ export default function CreateVehicle({
                   <button
                     type="button"
                     onClick={addRoutePricing}
-                    className="w-full px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors border-2 border-dashed border-green-300 hover:border-green-400"
+                    className="w-full px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors border-2 border-dashed border-green-300 hover:border-green-400 cursor-pointer"
                   >
                     ➕ Add Another Route
                   </button>
@@ -1020,7 +1020,7 @@ export default function CreateVehicle({
                   <button
                     type="submit"
                     disabled={processing}
-                    className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+                    className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 cursor-pointer"
                   >
                     {processing ? "Adding..." : "Add Vehicle"}
                   </button>

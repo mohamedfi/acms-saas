@@ -924,6 +924,8 @@ class RentalCompanyController extends Controller
         }
     }
 
+
+
     /**
      * Test method to verify controller is working
      */

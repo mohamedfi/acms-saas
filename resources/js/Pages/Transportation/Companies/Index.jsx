@@ -62,14 +62,21 @@ export default function CompaniesIndex({ companies, stats }) {
             </div>
             <div className="flex space-x-3">
               <Link
+                href={route("transportation.reports")}
+                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center space-x-2 cursor-pointer"
+              >
+                <span>📊</span>
+                <span>View Reports</span>
+              </Link>
+              <Link
                 href={route("transportation.companies.create")}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors cursor-pointer"
               >
                 ➕ Add New Company
               </Link>
               <Link
                 href={route("transportation.index")}
-                className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+                className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors cursor-pointer"
               >
                 ← Back to Transportation
               </Link>
@@ -345,7 +352,7 @@ export default function CompaniesIndex({ companies, stats }) {
                           "transportation.companies.show",
                           company.id
                         )}
-                        className="flex-1 px-3 py-2 bg-blue-600 text-white text-center rounded text-sm hover:bg-blue-700 transition-colors"
+                        className="flex-1 px-3 py-2 bg-blue-600 text-white text-center rounded text-sm hover:bg-blue-700 transition-colors cursor-pointer"
                       >
                         👁️ View Details
                       </Link>
@@ -354,7 +361,7 @@ export default function CompaniesIndex({ companies, stats }) {
                           "transportation.companies.edit",
                           company.id
                         )}
-                        className="flex-1 px-3 py-2 bg-green-600 text-white text-center rounded text-sm hover:bg-green-700 transition-colors"
+                        className="flex-1 px-3 py-2 bg-green-600 text-white text-center rounded text-sm hover:bg-green-700 transition-colors cursor-pointer"
                       >
                         ✏️ Edit
                       </Link>
@@ -366,7 +373,7 @@ export default function CompaniesIndex({ companies, stats }) {
                           "transportation.companies.vehicles.create",
                           company.id
                         )}
-                        className="flex-1 px-3 py-2 bg-orange-600 text-white text-center rounded text-sm hover:bg-orange-700 transition-colors font-semibold"
+                        className="flex-1 px-3 py-2 bg-orange-600 text-white text-center rounded text-sm hover:bg-orange-700 transition-colors font-semibold cursor-pointer"
                       >
                         🚗 Add Vehicle
                       </Link>
@@ -375,7 +382,7 @@ export default function CompaniesIndex({ companies, stats }) {
                           "transportation.companies.vehicles",
                           company.id
                         )}
-                        className="flex-1 px-3 py-2 bg-purple-600 text-white text-center rounded text-sm hover:bg-purple-700 transition-colors"
+                        className="flex-1 px-3 py-2 bg-purple-600 text-white text-center rounded text-sm hover:bg-purple-700 transition-colors cursor-pointer"
                       >
                         📋 Manage Fleet
                       </Link>
@@ -439,7 +446,7 @@ export default function CompaniesIndex({ companies, stats }) {
               </p>
               <Link
                 href={route("transportation.companies.create")}
-                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium cursor-pointer"
               >
                 ➕ Add First Company
               </Link>

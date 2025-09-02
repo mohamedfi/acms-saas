@@ -95,7 +95,7 @@ export default function TransportationIndex({ vehicles, stats }) {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             <Link
               href={route("transportation.companies.index")}
-              className="bg-blue-600 hover:bg-blue-700 text-white p-6 rounded-lg shadow transition-colors"
+              className="bg-blue-600 hover:bg-blue-700 text-white p-6 rounded-lg shadow transition-colors cursor-pointer"
             >
               <div className="text-center">
                 <div className="text-4xl mb-3">🚗</div>
@@ -108,7 +108,7 @@ export default function TransportationIndex({ vehicles, stats }) {
 
             <Link
               href={route("transportation.bookings.create")}
-              className="bg-green-600 hover:bg-green-700 text-white p-6 rounded-lg shadow transition-colors"
+              className="bg-green-600 hover:bg-green-700 text-white p-6 rounded-lg shadow transition-colors cursor-pointer"
             >
               <div className="text-center">
                 <div className="text-4xl mb-3">📅</div>
@@ -121,7 +121,7 @@ export default function TransportationIndex({ vehicles, stats }) {
 
             <Link
               href={route("transportation.maintenance")}
-              className="bg-orange-600 hover:bg-orange-700 text-white p-6 rounded-lg shadow transition-colors"
+              className="bg-orange-600 hover:bg-orange-700 text-white p-6 rounded-lg shadow transition-colors cursor-pointer"
             >
               <div className="text-center">
                 <div className="text-4xl mb-3">🔧</div>
