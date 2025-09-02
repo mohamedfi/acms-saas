@@ -144,76 +144,91 @@ export default function TransportationIndex({ vehicles, stats }) {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
                         <Link
                             href={route("transportation.dashboard")}
-                            className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow hover:shadow-lg transition-shadow"
+                            className="group bg-white dark:bg-gray-800 p-6 rounded-lg shadow hover:shadow-xl hover:scale-105 transition-all duration-300 border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 cursor-pointer"
                         >
                             <div className="text-center">
-                                <div className="text-3xl mb-3">📊</div>
-                                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                                <div className="text-3xl mb-3 group-hover:scale-110 transition-transform duration-300">📊</div>
+                                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                                     Dashboard
                                 </h3>
-                                <p className="text-gray-600 dark:text-gray-400 text-sm">
+                                <p className="text-gray-600 dark:text-gray-400 text-sm group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors">
                                     View detailed analytics and reports
                                 </p>
+                                <div className="mt-3 text-blue-600 dark:text-blue-400 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                                    Click to view →
+                                </div>
                             </div>
                         </Link>
 
                         <Link
                             href={route("transportation.vehicles")}
-                            className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow hover:shadow-lg transition-shadow"
+                            className="group bg-white dark:bg-gray-800 p-6 rounded-lg shadow hover:shadow-xl hover:scale-105 transition-all duration-300 border border-gray-200 dark:border-gray-700 hover:border-green-300 dark:hover:border-green-600 cursor-pointer"
                         >
                             <div className="text-center">
-                                <div className="text-3xl mb-3">🚙</div>
-                                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                                <div className="text-3xl mb-3 group-hover:scale-110 transition-transform duration-300">🚙</div>
+                                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">
                                     Fleet Management
                                 </h3>
-                                <p className="text-gray-600 dark:text-gray-400 text-sm">
+                                <p className="text-gray-600 dark:text-gray-400 text-sm group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors">
                                     Manage all vehicles in your fleet
                                 </p>
+                                <div className="mt-3 text-green-600 dark:text-green-400 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                                    Click to manage →
+                                </div>
                             </div>
                         </Link>
 
                         <Link
                             href={route("transportation.bookings")}
-                            className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow hover:shadow-lg transition-shadow"
+                            className="group bg-white dark:bg-gray-800 p-6 rounded-lg shadow hover:shadow-xl hover:scale-105 transition-all duration-300 border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-600 cursor-pointer"
                         >
                             <div className="text-center">
-                                <div className="text-3xl mb-3">📋</div>
-                                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                                <div className="text-3xl mb-3 group-hover:scale-110 transition-transform duration-300">📋</div>
+                                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
                                     Bookings
                                 </h3>
-                                <p className="text-gray-600 dark:text-gray-400 text-sm">
+                                <p className="text-gray-600 dark:text-gray-400 text-sm group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors">
                                     View and manage all rental bookings
                                 </p>
+                                <div className="mt-3 text-purple-600 dark:text-purple-400 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                                    Click to view →
+                                </div>
                             </div>
                         </Link>
 
                         <Link
                             href={route("transportation.maintenance")}
-                            className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow hover:shadow-lg transition-shadow"
+                            className="group bg-white dark:bg-gray-800 p-6 rounded-lg shadow hover:shadow-xl hover:scale-105 transition-all duration-300 border border-gray-200 dark:border-gray-700 hover:border-orange-300 dark:hover:border-orange-600 cursor-pointer"
                         >
                             <div className="text-center">
-                                <div className="text-3xl mb-3">🔧</div>
-                                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                                <div className="text-3xl mb-3 group-hover:scale-110 transition-transform duration-300">🔧</div>
+                                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">
                                     Maintenance
                                 </h3>
-                                <p className="text-gray-600 dark:text-gray-400 text-sm">
+                                <p className="text-gray-600 dark:text-gray-400 text-sm group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors">
                                     Track vehicle maintenance records
                                 </p>
+                                <div className="mt-3 text-orange-600 dark:text-orange-400 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                                    Click to track →
+                                </div>
                             </div>
                         </Link>
 
                         <Link
                             href={route("transportation.companies.index")}
-                            className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow hover:shadow-lg transition-shadow"
+                            className="group bg-white dark:bg-gray-800 p-6 rounded-lg shadow hover:shadow-xl hover:scale-105 transition-all duration-300 border border-gray-200 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-600 cursor-pointer"
                         >
                             <div className="text-center">
-                                <div className="text-3xl mb-3">🏢</div>
-                                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+                                <div className="text-3xl mb-3 group-hover:scale-110 transition-transform duration-300">🏢</div>
+                                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                                     Rental Companies
                                 </h3>
-                                <p className="text-gray-600 dark:text-gray-400 text-sm">
+                                <p className="text-gray-600 dark:text-gray-400 text-sm group-hover:text-gray-700 dark:group-hover:text-gray-300 transition-colors">
                                     Manage rental company partnerships
                                 </p>
+                                <div className="mt-3 text-indigo-600 dark:text-indigo-400 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                                    Click to manage →
+                                </div>
                             </div>
                         </Link>
                     </div>
