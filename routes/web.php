@@ -666,6 +666,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/transportation/maintenance', [TransportationController::class, 'maintenance'])->name('transportation.maintenance');
         Route::post('/transportation/maintenance', [TransportationController::class, 'storeMaintenance'])->name('transportation.maintenance.store');
         Route::put('/transportation/maintenance/{maintenance}', [TransportationController::class, 'updateMaintenance'])->name('transportation.maintenance.update');
+        Route::get('/transportation/reports', [RentalCompanyController::class, 'reports'])->name('transportation.reports');
 
 
 

@@ -799,6 +799,79 @@ class RentalCompanyController extends Controller
     }
 
     /**
+     * Display transportation reports and analytics.
+     */
+    public function reports()
+    {
+        try {
+            // Get all vehicles with their companies
+            $vehicles = CompanyVehicle::with('rentalCompany')
+                ->orderBy('revenue_to_date', 'desc')
+                ->get();
+
+            // Calculate statistics
+            $stats = [
+                'total_revenue' => $vehicles->sum('revenue_to_date'),
+                'active_vehicles' => $vehicles->where('is_active', true)->count(),
+                'available_vehicles' => $vehicles->where('status', 'available')->count(),
+                'rented_vehicles' => $vehicles->where('status', 'rented')->count(),
+                'maintenance_vehicles' => $vehicles->where('status', 'maintenance')->count(),
+                'out_of_service_vehicles' => $vehicles->where('status', 'out_of_service')->count(),
+                'total_bookings' => $vehicles->sum('total_bookings'),
+                'average_rating' => $vehicles->avg('average_rating'),
+                'total_reviews' => $vehicles->sum('total_reviews'),
+                'utilization_rate' => $vehicles->count() > 0 ? round(($vehicles->where('status', 'rented')->count() / $vehicles->count()) * 100, 1) : 0,
+                'avg_booking_duration' => 3.5, // This would come from actual booking data
+            ];
+
+            // Generate monthly revenue data (mock data for demonstration)
+            $monthlyRevenue = [
+                ['month' => 'Jan', 'revenue' => 15000],
+                ['month' => 'Feb', 'revenue' => 18000],
+                ['month' => 'Mar', 'revenue' => 22000],
+                ['month' => 'Apr', 'revenue' => 19000],
+                ['month' => 'May', 'revenue' => 25000],
+                ['month' => 'Jun', 'revenue' => 28000],
+                ['month' => 'Jul', 'revenue' => 32000],
+                ['month' => 'Aug', 'revenue' => 30000],
+                ['month' => 'Sep', 'revenue' => 35000],
+                ['month' => 'Oct', 'revenue' => 38000],
+                ['month' => 'Nov', 'revenue' => 42000],
+                ['month' => 'Dec', 'revenue' => 45000],
+            ];
+
+            // Vehicle types distribution
+            $vehicleTypes = $vehicles->groupBy('vehicle_type')->map(function ($group, $type) {
+                return [
+                    'type' => $type,
+                    'count' => $group->count(),
+                    'revenue' => $group->sum('revenue_to_date')
+                ];
+            })->values();
+
+            // Top routes (mock data - would come from actual booking data)
+            $topRoutes = [
+                ['route' => 'Cairo → Giza', 'bookings' => 45, 'revenue' => 2700],
+                ['route' => 'Cairo → Alexandria', 'bookings' => 32, 'revenue' => 16000],
+                ['route' => 'Cairo → Sharm El Sheikh', 'bookings' => 28, 'revenue' => 22400],
+                ['route' => 'Cairo → Luxor', 'bookings' => 22, 'revenue' => 8800],
+                ['route' => 'Airport → Downtown', 'bookings' => 67, 'revenue' => 5360],
+            ];
+
+            return Inertia::render('Transportation/Reports', [
+                'stats' => $stats,
+                'vehicles' => $vehicles,
+                'companies' => RentalCompany::withCount('vehicles')->get(),
+                'monthlyRevenue' => $monthlyRevenue,
+                'vehicleTypes' => $vehicleTypes,
+                'topRoutes' => $topRoutes,
+            ]);
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error loading reports: ' . $e->getMessage());
+        }
+    }
+
+    /**
      * Test method to verify controller is working
      */
     public function testMethod()
