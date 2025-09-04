@@ -5,6 +5,8 @@ use App\Http\Controllers\CateringController;
 use App\Http\Controllers\CateringRoleController;
 use App\Http\Controllers\TransportationController;
 use App\Http\Controllers\RentalCompanyController;
+use App\Http\Controllers\UnifiedClientController;
+use App\Http\Controllers\ClientReportsController;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\MealBreakPlanController;
 use App\Http\Controllers\FoodItemController;
@@ -50,6 +52,36 @@ Route::middleware(['auth'])->group(function () {
 
     // Dashboard (named route for route('dashboard'))
     Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+
+    // Unified Client Management
+    Route::prefix('clients')->name('clients.')->group(function () {
+        Route::get('/', [UnifiedClientController::class, 'index'])->name('index');
+        Route::get('/{type}/{id}', [UnifiedClientController::class, 'show'])->name('show');
+        Route::delete('/{type}/{id}', [UnifiedClientController::class, 'destroy'])->name('destroy');
+        Route::post('/export', [UnifiedClientController::class, 'export'])->name('export');
+        Route::post('/bulk-action', [UnifiedClientController::class, 'bulkAction'])->name('bulk-action');
+        Route::get('/reports', [ClientReportsController::class, 'index'])->name('reports');
+        Route::post('/reports/export-pdf', [ClientReportsController::class, 'exportPdf'])->name('reports.export-pdf');
+    });
+
+    // Separate Reports
+    Route::prefix('reports')->name('reports.')->group(function () {
+        Route::get('/training-clients', [\App\Http\Controllers\TrainingClientsReportController::class, 'index'])->name('training-clients');
+        Route::get('/business-clients', [\App\Http\Controllers\BusinessClientsReportController::class, 'index'])->name('business-clients');
+        Route::get('/system-users', [\App\Http\Controllers\SystemUsersReportController::class, 'index'])->name('system-users');
+    });
+
+    // Potential Clients Management
+    Route::resource('potential-clients', \App\Http\Controllers\PotentialClientController::class);
+    Route::post('/potential-clients/{potentialClient}/convert', [\App\Http\Controllers\PotentialClientController::class, 'convert'])->name('potential-clients.convert');
+
+    // Certificates Management
+    Route::resource('certificates', \App\Http\Controllers\CertificateController::class);
+    Route::get('/certificates/{certificate}/view', [\App\Http\Controllers\CertificateController::class, 'view'])->name('certificates.view');
+    Route::get('/certificates/{certificate}/customize', [\App\Http\Controllers\CertificateController::class, 'customize'])->name('certificates.customize');
+    Route::post('/certificates/{certificate}/customize', [\App\Http\Controllers\CertificateController::class, 'saveCustomization'])->name('certificates.save-customization');
+    Route::post('/certificates/{certificate}/export-pdf', [\App\Http\Controllers\CertificateController::class, 'exportPdf'])->name('certificates.export-pdf');
+    Route::post('/certificates/bulk-action', [\App\Http\Controllers\CertificateController::class, 'bulkAction'])->name('certificates.bulk-action');
 
     // Core Management Pages
     Route::get('/courses', function () {

@@ -482,6 +482,14 @@ export default function Dashboard({ auth, stats, recentData }) {
                     </span>
                   </a>
                   <a
+                    href={route("clients.index")}
+                    className="block p-3 rounded-lg bg-orange-600 hover:bg-orange-700 transition-colors cursor-pointer"
+                  >
+                    <span className="text-white font-medium">
+                      👥 Manage All Clients
+                    </span>
+                  </a>
+                  <a
                     href={route("catering.meal-break-plans.create")}
                     className="block p-3 rounded-lg bg-purple-600 hover:bg-purple-700 transition-colors"
                   >
